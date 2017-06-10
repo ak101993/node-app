@@ -14,12 +14,17 @@ app.use(express.static(publicPath));
 io.on('connection',(socket)=>{
     console.log(`New user connected ${socket}`);
     //server emit a newMessage event and the client listen to that event
-    socket.emit('newMessage',{
-       from: 'a.kumar',
-       text: 'This is return mail'
-    });
+    // socket.emit('newMessage',{
+    //    from: 'a.kumar',
+    //    text: 'This is return mail'
+    // });
     socket.on('createMessage',(createMessage)=>{
-        console.log(createMessage)
+        console.log('createMessage',createMessage);
+        io.emit('newMessage',{
+           from: createMessage.from,
+           text: createMessage.text,
+           createdAt: new Date().getTime()
+        });
     })
     socket.on('disconnect',()=>{
         console.log('Disconnected from server');
